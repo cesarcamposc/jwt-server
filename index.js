@@ -1,23 +1,23 @@
-const express = require('express')
-const jwt = require('jsonwebtoken')
-const bodyParser = require('body-parser')
-const dotenv = require('dotenv')
-const cors = require('cors')
+const express = require('express');
+const jwt = require('jsonwebtoken');
+//const dotenv = require('dotenv')
+const cors = require('cors');
 
-dotenv.config() // Cargar variables de entorno desde el archivo .env
+//dotenv.config() // Cargar variables de entorno desde el archivo .env
 
-const app = express()
-const port = 3000
+const app = express();
+const port = 3000;
+const SECRET_KEY = 'mi_clave_secreta';
 
-app.use(bodyParser.json()) // Middleware para parsear el cuerpo de las peticiones
-app.use(cors()) // Middleware para habilitar CORS
+app.use(express.json()); // Middleware para parsear el cuerpo de las peticiones
+app.use(cors()); // Middleware para habilitar CORS
 
 // usuario ficticio
 const userDemo = {
   id: 1,
-  name : 'Juan Perez',
+  name : 'Juan Perez 3',
   email: 'juan.perez@gmail.com',
-  password: 'password123' }
+  password: '123456'};
 
 
 // ruta de login(para generar el JWT)
@@ -27,10 +27,10 @@ app.post('/login', (req, res) => {
   // Validar que el usuario y la contraseña sean correctos
   if (email === userDemo.email && password === userDemo.password) {
     //generar el token
-    const token = jwt.sign({ id: userDemo.id, name: userDemo.name }, process.env.JWT_SECRET, {expiresIn: '1h'})
-    res.json({ token })
+    const token = jwt.sign({ id: userDemo.id, name: userDemo.name }, SECRET_KEY, {expiresIn: '1h'})
+    return res.json({ token })
   } else {
-    res.status(401).json({ message: 'Invalid credentials' })
+    return res.status(401).json({ message: 'Invalid credentials' })
   }
 })
 
@@ -41,11 +41,11 @@ const verifyToken = (req, res, next) => {
     return res.status(401).json({ message: 'No token provided' })
   }
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const decoded = jwt.verify(token, SECRET_KEY)
     req.user = decoded
     next()
   } catch (error) {
-    res.status(401).json({ message: 'Invalid token' })
+    return res.status(401).json({ message: 'Invalid token' })
   }
 }
 
