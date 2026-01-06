@@ -15,8 +15,8 @@ app.use(cors()); // Middleware para habilitar CORS
 // usuario ficticio
 const userDemo = {
   id: 1,
-  name : 'Juan Perez 3',
-  email: 'juan.perez@gmail.com',
+  name : 'Juan Perez',
+  email: 'juan.perez@example.com',
   password: '123456'};
 
 
